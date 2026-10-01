@@ -1,5 +1,5 @@
 #!/bin/bash
-# setup-onion.sh: turn a fresh Ubuntu 24.04 server into an xCoin survival-sheet onion mirror. Run as root, once.
+# setup-onion.sh: turn a fresh Ubuntu 24.04 or 26.04 server into an xCoin survival-sheet onion mirror. Run as root, once.
 # Re-running is safe: every step checks before it changes anything.
 #
 #   The server opens NO port to the internet. Tor makes outgoing connections only; nginx answers on 127.0.0.1:8080
@@ -11,7 +11,8 @@
 #   allowed_signers), copied in by publish.sh.
 set -euo pipefail
 [ "$(id -u)" = 0 ] || { echo "run as root"; exit 1; }
-. /etc/os-release; [ "$VERSION_CODENAME" = noble ] || { echo "expected Ubuntu 24.04 (noble), found $VERSION_CODENAME"; exit 1; }
+. /etc/os-release
+case "$VERSION_CODENAME" in noble|resolute) ;; *) echo "expected Ubuntu 24.04 (noble) or 26.04 (resolute), found $VERSION_CODENAME"; exit 1 ;; esac
 
 TOR_FPR=A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89     # the Tor Project's archive signing key (deb.torproject.org)
 WEB=/var/www/xcoin-survival
@@ -28,7 +29,7 @@ if [ ! -f /usr/share/keyrings/tor-archive-keyring.gpg ]; then
   [ "$got" = "$TOR_FPR" ] || { echo "Tor signing key fingerprint mismatch: $got"; rm -f /tmp/tor.gpg; exit 1; }
   install -m 644 /tmp/tor.gpg /usr/share/keyrings/tor-archive-keyring.gpg; rm -f /tmp/tor.gpg
 fi
-echo "deb [signed-by=/usr/share/keyrings/tor-archive-keyring.gpg] https://deb.torproject.org/torproject.org noble main" \
+echo "deb [signed-by=/usr/share/keyrings/tor-archive-keyring.gpg] https://deb.torproject.org/torproject.org $VERSION_CODENAME main" \
   > /etc/apt/sources.list.d/tor.list
 apt-get update -q
 apt-get install -y -q tor deb.torproject.org-keyring
