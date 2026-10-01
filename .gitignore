@@ -1,3 +1,4 @@
 __pycache__/
 exports/
 *.pdf
+.DS_Store
