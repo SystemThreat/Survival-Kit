@@ -146,13 +146,18 @@ nex-cli getblockhash 2000</pre>
 <p>A checkpoint is added here every 1,000 blocks. This page was last updated at height 2,208 (2026-10-01).</p>
 
 <h2 id="mine">5 · Mine <small>pools are optional</small></h2>
-<p>Mining needs only your own node and an <code>xpa1r…</code> address you control. Solo mining pays the whole block to you.</p>
+<p>Mining needs only your own node, the small pool program that ships with the source code, and an <code>xpa1r…</code> address you control. Solo, a block you find pays its whole reward to you, with no fee.</p>
 <ol>
-  <li>Run <code>nexd</code> and wait until <code>nex-cli getblockchaininfo</code> shows it caught up.</li>
-  <li>Point a MetalDAG miner at your own node with your payout address.</li>
-  <li>Never mine on a node that has no peers: its blocks may be on a chain nobody else follows.</li>
+  <li>Run <code>nexd</code> and wait until <code>nex-cli getblockchaininfo</code> shows it caught up. Never mine on a node with no peers: its blocks may be on a chain nobody else follows.</li>
+  <li>Start your own pool next to it, from the source folder (solo by default, standard Python only):
+<pre>XCOIN_RPC_COOKIE="$HOME/.nex/.cookie" XCOIN_NATPMP=0 \
+XCOIN_STATS_DIR="$HOME/.xcoin-pool" python3 xcoin-pool/xcoin-pool.py</pre>
+  On macOS the cookie is <code>"$HOME/Library/Application Support/NEX/.cookie"</code>. <code>XCOIN_NATPMP=0</code> keeps the port off your router.</li>
+  <li>Point a MetalDAG miner at it. NerdMiner on an Apple Silicon Mac:
+<pre>./NerdMiner xpa1r…your-address --pool 127.0.0.1:3333 --base 1790380800 --worker mymac</pre>
+  <code>--base 1790380800</code> is the genesis time (2026-09-26 00:00 UTC), which sets the MetalDAG epochs. It must be exactly this number.</li>
 </ol>
-<p class="todo">DRAFT: the exact miner command line (Mac Metal miner and the CLI miner) goes here.</p>
+<p class="note">Ordinary Bitcoin SHA-256 machines (ASICs) cannot mine xCoin: MetalDAG is a different proof of work.</p>
 
 <h2 id="copies">6 · Mirrors <small>the same page everywhere · if one is gone, try the next</small></h2>
 <p>Every mirror serves this exact file, byte for byte. Nothing on any mirror differs: same text, same seeds, same checkpoints.</p>
