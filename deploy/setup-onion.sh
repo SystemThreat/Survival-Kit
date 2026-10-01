@@ -47,7 +47,7 @@ server {
     add_header X-Content-Type-Options nosniff always;
     add_header Referrer-Policy no-referrer always;
     add_header Content-Security-Policy "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'" always;
-    location / { try_files $uri =404; }
+    location / { try_files $uri $uri/ =404; }
 }
 NGINX
 rm -f /etc/nginx/sites-enabled/default
