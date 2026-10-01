@@ -31,8 +31,9 @@ any copy can be checked against the release key, so mirrors keep checking each o
     cd ~/xcoin-sites/xcoin-survival && tools/keygen.sh
 
 ssh-keygen asks for a passphrase (hidden). Choose a long one and keep it on paper with the other key passphrases.
-The private key stays in `~/.xcoin-survival-keys/`; copy that folder to both USB sticks ("Ceremony Keys/") next to
-a copy of this README. Without the key file AND the passphrase, no new release can be signed. Old releases stay valid.
+The private key is made **on the key drive**, in `/Volumes/david/Survival Keys/`, never on the Mac (another location:
+set `XCOIN_SURVIVAL_KEYS`). Copy that folder to the second USB stick, next to a copy of this README. Signing reads the
+key from the drive, so the drive must be plugged in. Without the key file AND the passphrase, no new release can be signed. Old releases stay valid.
 
 Later: add co-maintainers' public keys to `allowed_signers` so the sheet does not depend on one person.
 
@@ -57,5 +58,6 @@ verifies the result. Publish `site/` (all three files) and `allowed_signers` to 
 
 ## Never
 
+- Never copy the private key onto the Mac.
 - Never put the private key or its passphrase in this repository, a note app, email or chat.
 - Never sign a page you have not read in full.
