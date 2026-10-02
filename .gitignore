@@ -2,3 +2,5 @@ __pycache__/
 exports/
 *.pdf
 .DS_Store
+deploy/hosts
+deploy/check-node

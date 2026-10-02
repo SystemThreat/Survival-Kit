@@ -1,0 +1,3 @@
+# Copy to deploy/hosts (git-ignored) and list the official onion mirrors deploy/publish.sh updates: one ssh target per
+# line, comments after #. Keep the real file private: it ties onion addresses to servers.
+root@xcoin-onion          # onion #1 genesis

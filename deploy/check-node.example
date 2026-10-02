@@ -1,0 +1,3 @@
+# Copy to deploy/check-node (git-ignored): the ssh target of a second node that tools/checkpoints.py cross-checks
+# every checkpoint hash against (read-only). Keep the real file private.
+root@second-node

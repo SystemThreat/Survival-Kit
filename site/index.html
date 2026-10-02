@@ -19,6 +19,7 @@ header p{margin:6px 0 0}
 .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
 h1{margin:6px 0 0;font-size:clamp(26px,6vw,40px);line-height:1.05;letter-spacing:-.02em}
 h2{margin:40px 0 10px;font-size:18px;text-transform:uppercase;letter-spacing:.06em;border-bottom:3px solid var(--line);padding-bottom:6px}
+h3{margin:28px 0 8px;font-size:15px;text-transform:uppercase;letter-spacing:.06em}h3 small{text-transform:none;letter-spacing:0;font-weight:400;color:var(--muted)}
 h2 small{font-size:12px;letter-spacing:.1em;color:var(--muted);font-weight:400}
 nav{margin:18px 0 0;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px}
 .save{margin:16px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;font-size:13px}
@@ -29,7 +30,7 @@ nav{margin:18px 0 0;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px}
 .save a.dl:hover,.save a.dl:focus-visible{background:var(--lime);color:#0a0a0a;outline:none}
 table{width:100%;border-collapse:collapse;font-size:14px}
 th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
-th{width:34%;font-weight:700;white-space:nowrap}
+th{width:28%;font-weight:700;white-space:nowrap}
 td code{word-break:break-all}
 @media screen and (max-width:600px){th,td{display:block;width:auto}th{border-bottom:0;padding-bottom:0}td{padding-top:2px}}
 .wrap{overflow-x:auto}
@@ -39,6 +40,39 @@ pre{background:var(--soft);border:2px solid var(--line);padding:12px 14px;overfl
 .note{border-left:6px solid var(--lime);background:var(--soft);padding:10px 14px;margin:12px 0}
 .todo{border:2px dashed var(--warn);color:var(--warn);padding:8px 12px;margin:10px 0;font-size:13.5px}
 ol,ul{padding-left:22px}li{margin:4px 0}
+.cp th,.cp td{white-space:nowrap}
+.cp td.hash{white-space:normal}
+.cp{table-layout:fixed}                       /* fixed columns: opening "Check it" or paging never moves the divider */
+.cp tr>:first-child{width:28%}.cp tr>:not(:first-child){width:auto}                 /* a narrow label column: a whole onion address fits on one line */
+@media screen and (min-width:760px){#mr td code,td.hash,.cp td.hash{white-space:nowrap;font-size:13.5px}}   /* whole hashes and addresses on one line */
+.cp thead th{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+/* no script: the newest five, and a pure-CSS switch for all of them */
+.cp tbody tr:nth-child(n+6){display:none}
+.cp-all:checked + .cp-all-l + .wrap .cp tbody tr{display:table-row}
+.cp-all:checked + .cp-all-l + .wrap{max-height:30em;overflow-y:auto;border:2px solid var(--line)}   /* "all" scrolls in its own box: the sections below stay put */
+.cp-all{margin:10px 6px 10px 0}.cp-all-l{font-size:13px;cursor:pointer}
+/* with the script: it shows rows itself (the hidden attribute), and the switch is not needed */
+.cp.js tbody tr{display:table-row}.cp.js tbody tr[hidden]{display:none}
+.st{display:inline-block;white-space:nowrap;margin-top:6px;padding:1px 8px;font-size:12px;letter-spacing:.04em;border:2px dashed var(--warn);color:var(--warn)}
+.st.live{border-style:solid;border-color:var(--line);color:var(--ink);background:var(--lime);color:#0a0a0a}
+.gm{margin-top:8px}.gm summary{display:inline-block;cursor:pointer;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.06em;border:2px solid var(--ink);padding:6px 12px;list-style:none}
+.gm summary::-webkit-details-marker{display:none}.gm summary:hover,.gm summary:focus-visible{background:var(--lime);color:#0a0a0a;outline:none}
+.gm[open] summary{background:var(--ink);color:var(--paper)}
+.sc-out.ok{font-weight:700;color:var(--ink);background:var(--lime);color:#0a0a0a;padding:4px 8px}.sc-out.bad{font-weight:700;color:var(--warn)}
+.gm-hex{white-space:pre-wrap;word-break:break-all;overflow-wrap:anywhere}
+.gm,.gm p,.gm code,.sc-out{white-space:normal!important;overflow-wrap:anywhere}   /* the box inside a one-line hash cell wraps */.gm-out{font-weight:700}
+.genesis-mirror{border:3px solid var(--line);background:var(--soft);padding:12px 16px;margin:12px 0;display:flex;flex-direction:column;gap:4px}
+.genesis-mirror .eyebrow{font-size:12px}.genesis-mirror code{word-break:break-all;font-size:14px;font-weight:700}
+.cp-tools{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:12px 0}
+.cp-tools[hidden],.cp-pager[hidden]{display:none}
+.cp-tools label{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+.cp-tools input{font:inherit;font-size:15px;padding:8px 10px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);width:min(260px,100%)}
+.cp-tools input:focus-visible{outline:3px solid var(--lime);outline-offset:1px}
+.cp-msg{margin:0;flex-basis:100%;font-size:13.5px;min-height:1.4em}
+.cp-pager{display:flex;align-items:center;gap:12px;margin:10px 0;font-size:13px}
+.cp-pager button{font:inherit;font-weight:700;border:2px solid var(--ink);background:var(--paper);color:var(--ink);padding:6px 12px;cursor:pointer}
+.cp-pager button:disabled{opacity:.35;cursor:default}
+.cp-pager button:not(:disabled):hover,.cp-pager button:focus-visible{background:var(--lime);color:#0a0a0a;outline:none}
 footer{margin-top:48px;border-top:3px solid var(--line);padding-top:12px;font-size:13px;color:var(--muted)}
 /* Print: black on white whatever the screen theme, roomy page margins (the bottom one larger, so nothing runs to the
    edge), and no block cut in half: a code box, a table row, a note or a list item moves whole to the next page, and a
@@ -49,14 +83,17 @@ footer{margin-top:48px;border-top:3px solid var(--line);padding-top:12px;font-si
   html,body{background:#fff}
   body{max-width:none;padding:0;font-size:11pt;line-height:1.45}
   header{background:#fff;border:2pt solid #000}
-  nav,.save{display:none}
+  nav,.save,.cp-tools,.cp-pager,.cp-all,.cp-all-l{display:none!important}
+  .cp tbody tr,.cp tbody tr[hidden]{display:table-row!important}
   h2{margin-top:22pt;break-after:avoid;page-break-after:avoid}
   h2 + p,h2 + .wrap,h2 + pre{break-before:avoid;page-break-before:avoid}
-  pre,tr,.note,.todo,li,header,footer{break-inside:avoid;page-break-inside:avoid}
+  pre,tr,.note,.todo,li,header,footer,.genesis-mirror{break-inside:avoid;page-break-inside:avoid}
   pre{white-space:pre-wrap;word-break:break-all;font-size:9.5pt}
-  .wrap{overflow:visible}
+  .wrap{overflow:visible;max-height:none!important;border:0!important}
   a{text-decoration:none}
   a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt}
+  td.hash a::after{content:none!important}
+  .gm{display:none}   /* printed: the decoded message is already in the row above */   /* a hash prints once; the explorer link is a screen convenience */
   p,li{orphans:3;widows:3}
   ol,ul{padding-left:28pt}
 }
@@ -84,13 +121,21 @@ footer{margin-top:48px;border-top:3px solid var(--line);padding-top:12px;font-si
 
 <nav aria-label="Sections">
   <a href="#chain">1 · The chain</a><a href="#connect">2 · Connect</a><a href="#software">3 · Software</a>
-  <a href="#check">4 · Check the chain</a><a href="#mine">5 · Mine</a><a href="#copies">6 · Mirrors</a>
+  <a href="#check">4 · Check the chain</a><a href="#mine">5 · Mine</a><a href="#copies">6 · Mirrors</a><a href="#sealed">7 · Sealed</a>
 </nav>
 
 <h2 id="chain">1 · The chain <small>its identity never changes</small></h2>
 <div class="wrap"><table>
   <tr><th>Name / ticker</th><td>xCoin · XID</td></tr>
-  <tr><th>Genesis block</th><td class="hash">3bc1a36df7d786a5c4584e21d248e0a3785a96aaa60a5b3959dfad50283379f2</td></tr>
+  <tr><th>Genesis block</th><td class="hash"><a href="https://superknet.com/block/3bc1a36df7d786a5c4584e21d248e0a3785a96aaa60a5b3959dfad50283379f2">3bc1a36df7d786a5c4584e21d248e0a3785a96aaa60a5b3959dfad50283379f2</a></td></tr>
+  <tr><th>Genesis message</th><td><b>“Hic experimentum prosperat - 2026-09-26 - 10,000,000,000,000,000 sats, 100M XID”</b><br><small>Latin: “here the experiment prospers”. Written into block 0 for good: change one letter and the genesis hash changes.</small>
+    <details class="gm"><summary>Decode it from the block</summary>
+      <p>Block 0’s coinbase, exactly as the chain stores it (hex):</p>
+      <pre class="gm-hex" id="gm-hex">04ffff001d01044c4f486963206578706572696d656e74756d2070726f737065726174202d20323032362d30392d3236202d2031302c3030302c3030302c3030302c3030302c30303020736174732c203130304d20584944</pre>
+      <p>The first 9 bytes are markers (<code>04 ffff001d</code> difficulty, <code>01 04</code>, <code>4c 4f</code> = “79 bytes follow”); every pair after them is one letter (<code>48</code>=H, <code>69</code>=i, <code>63</code>=c …):</p>
+      <pre class="gm-out" id="gm-out">Hic experimentum prosperat - 2026-09-26 - 10,000,000,000,000,000 sats, 100M XID</pre>
+      <p>Check it with your own node: <code>nex-cli getblock $(nex-cli getblockhash 0) 2</code> → <code>tx[0].vin[0].coinbase</code>.</p>
+    </details></td></tr>
   <tr><th>Genesis mined</th><td>2026-09-26 00:00 UTC</td></tr>
   <tr><th>Network magic</th><td><code>58 50 41 03</code> ("XPA" + 0x03)</td></tr>
   <tr><th>P2P port</th><td>9333</td></tr>
@@ -107,21 +152,20 @@ footer{margin-top:48px;border-top:3px solid var(--line);padding-top:12px;font-si
 addnode=198.252.107.13:9333
 addnode=103.119.217.105:9333
 addnode=198.252.101.117:9333
-addnode=54.20.130.14:9333</pre>
+addnode=54.20.130.14:9333
+addnode=136.118.128.212:9333</pre>
 <p>One answering peer is enough: it tells your node about every other node it knows. Then ask what you found:</p>
 <pre>nex-cli getconnectioncount
 nex-cli getpeerinfo</pre>
 <p>DNS seeds, used automatically while they work:</p>
 <pre>seed.xcoinproject.com   seed.superknet.com   seed.xcoinminer.com
 seed.minedifferent.com  seed.movepunk.com</pre>
-<p class="todo">DRAFT: add community nodes (run by people other than the founder) to the list above before publishing, so it does not depend on one operator.</p>
 
 <h2 id="software">3 · Software <small>get it, then check it</small></h2>
 <div class="wrap"><table>
   <tr><th>Current release</th><td>v31.99.1</td></tr>
   <tr><th>Source code</th><td><a href="https://github.com/SystemThreat/xCoin">github.com/SystemThreat/xCoin</a></td></tr>
   <tr><th>Release key</th><td class="hash">SHA256:D9pP1RVvZdAiX9k1G1Kh8UJ0D9kCZQuw7eJlSlIqEjM<br><small>ed25519 · release@xcoinproject · signs this page (allowed_signers)</small></td></tr>
-  <tr><th>Other source copies</th><td class="todo">DRAFT: Codeberg, Radicle and IPFS mirrors (to be created)</td></tr>
 </table></div>
 <p>Build from source (macOS or Linux):</p>
 <p>Or download the source of this release: <a href="https://github.com/SystemThreat/xCoin/archive/refs/tags/v31.99.1.zip">.zip</a> · <a href="https://github.com/SystemThreat/xCoin/archive/refs/tags/v31.99.1.tar.gz">.tar.gz</a></p>
@@ -129,21 +173,35 @@ seed.minedifferent.com  seed.movepunk.com</pre>
 git checkout v31.99.1
 cmake -B build &amp;&amp; cmake --build build -j
 ./build/bin/nexd -daemon</pre>
-<p>Check a downloaded file before running it:</p>
-<pre>shasum -a 256 &lt;file&gt;      # must equal the line in SHA256SUMS
-gpg --verify SHA256SUMS.asc SHA256SUMS</pre>
-<p class="todo">DRAFT: release checksums and the release-signing key fingerprint go here once releases are signed (step 5 of the plan).</p>
+<p>Check you have the real release: after <code>git checkout v31.99.1</code>, this must print exactly the commit below.</p>
+<pre>git rev-parse HEAD
+78a196d85985f14d36843e3235208f9440487336</pre>
 
 <h2 id="check">4 · Check the chain <small>are you on the real one?</small></h2>
-<p>Ask your node for these blocks. Every hash must match exactly.</p>
-<pre>nex-cli getblockhash 1000
-nex-cli getblockhash 2000</pre>
-<div class="wrap"><table>
-  <tr><th>Height 0</th><td class="hash">3bc1a36df7d786a5c4584e21d248e0a3785a96aaa60a5b3959dfad50283379f2</td></tr>
-  <tr><th>Height 1,000</th><td class="hash">e19900d54a3adbc8c43f6cd10de04ec8ff9aee49ed2a14129960574c796c54b4</td></tr>
-  <tr><th>Height 2,000</th><td class="hash">5f710368c643c7b61722b50de8e7bcd51bae99f21f0ae7ee552a3c665a083412</td></tr>
+<p>A checkpoint is one block every 1,000 heights. Ask your node for the same height; the hash must match exactly:</p>
+<pre>nex-cli getblockhash 2000</pre>
+<div class="cp-tools" id="cp-tools" hidden>
+  <label for="cp-q">Find a checkpoint</label>
+  <input id="cp-q" type="search" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="block height, e.g. 2000">
+  <p id="cp-msg" class="cp-msg" role="status" aria-live="polite"></p>
+</div>
+<input type="checkbox" id="cp-all" class="cp-all"><label for="cp-all" class="cp-all-l">Show all checkpoints</label>
+<div class="wrap"><table class="cp" id="cp">
+<thead><tr><th>Height</th><th>Block hash</th></tr></thead>
+<tbody>
+<!-- checkpoints:begin (written by tools/checkpoints.py; newest first) -->
+<tr data-h="2000"><th>2,000</th><td class="hash"><a href="https://superknet.com/block/5f710368c643c7b61722b50de8e7bcd51bae99f21f0ae7ee552a3c665a083412">5f710368c643c7b61722b50de8e7bcd51bae99f21f0ae7ee552a3c665a083412</a></td></tr>
+<tr data-h="1000"><th>1,000</th><td class="hash"><a href="https://superknet.com/block/e19900d54a3adbc8c43f6cd10de04ec8ff9aee49ed2a14129960574c796c54b4">e19900d54a3adbc8c43f6cd10de04ec8ff9aee49ed2a14129960574c796c54b4</a></td></tr>
+<tr data-h="0"><th>0</th><td class="hash"><a href="https://superknet.com/block/3bc1a36df7d786a5c4584e21d248e0a3785a96aaa60a5b3959dfad50283379f2">3bc1a36df7d786a5c4584e21d248e0a3785a96aaa60a5b3959dfad50283379f2</a></td></tr>
+<!-- checkpoints:end -->
+</tbody>
 </table></div>
-<p>A checkpoint is added here every 1,000 blocks. This page was last updated at height 2,208 (2026-10-01).</p>
+<nav class="cp-pager" id="cp-pager" aria-label="Checkpoint pages" hidden>
+  <button type="button" id="cp-prev">← Previous</button>
+  <span id="cp-page" aria-live="polite"></span>
+  <button type="button" id="cp-next">Next →</button>
+</nav>
+<p>Newest first. This page was last updated at height <!-- cp-tip -->2,438<!-- /cp-tip -->.</p>
 
 <h2 id="mine">5 · Mine <small>pools are optional</small></h2>
 <p>Mining needs only your own node, the small pool program that ships with the source code, and an <code>xpa1r…</code> address you control. Solo, a block you find pays its whole reward to you, with no fee.</p>
@@ -161,23 +219,127 @@ XCOIN_STATS_DIR="$HOME/.xcoin-pool" python3 xcoin-pool/xcoin-pool.py</pre>
 
 <h2 id="copies">6 · Mirrors <small>the same page everywhere · if one is gone, try the next</small></h2>
 <p>Every mirror serves this exact file, byte for byte. Nothing on any mirror differs: same text, same seeds, same checkpoints.</p>
-<div class="wrap"><table>
-  <tr><th>Tor (onion)</th><td><a href="http://xcoinidhhqb2raevgt244ellko3s6j3r7krpblru4zvdhccolg26akqd.onion/"><code>xcoinidhhqb2raevgt244ellko3s6j3r7krpblru4zvdhccolg26akqd.onion</code></a><br><small>live since 2026-10-01 · open in Tor Browser</small></td></tr>
-  <tr><th>IPFS</th><td><code>ipfs://DRAFT-cid</code> <span class="todo">planned</span></td></tr>
-  <tr><th>Codeberg Pages</th><td><code>DRAFT.codeberg.page</code> <span class="todo">planned</span></td></tr>
-  <tr><th>GitHub Pages</th><td><code>DRAFT.github.io</code> <span class="todo">planned</span></td></tr>
-  <tr><th>xcoinproject.com</th><td><a href="https://xcoinproject.com/survival">xcoinproject.com/survival</a> <span class="todo">planned</span></td></tr>
-  <tr><th>superknet.com</th><td><a href="https://superknet.com/survival">superknet.com/survival</a> <span class="todo">planned</span></td></tr>
+<div class="genesis-mirror">
+  <span class="eyebrow">Genesis mirror · the original</span>
+  <a href="http://xcoinidhhqb2raevgt244ellko3s6j3r7krpblru4zvdhccolg26akqd.onion/"><code>xcoinidhhqb2raevgt244ellko3s6j3r7krpblru4zvdhccolg26akqd.onion</code></a>
+  <small>Tor · live since 2026-10-01 · the first copy, run by the founder</small>
+</div>
+<div class="cp-tools" id="mr-tools" hidden>
+  <label for="mr-q">Find a mirror</label>
+  <input id="mr-q" type="search" autocomplete="off" spellcheck="false" placeholder="address or provider">
+  <p id="mr-msg" class="cp-msg" role="status" aria-live="polite"></p>
+</div>
+<input type="checkbox" id="mr-all" class="cp-all"><label for="mr-all" class="cp-all-l">Show all mirrors</label>
+<div class="wrap"><table class="cp" id="mr">
+<thead><tr><th>Mirror</th><th>Address</th></tr></thead>
+<tbody>
+<tr data-s="tor (onion) #2 hawk host · singapore xcoinidb2u22ecqthp2awr3uhabdecps2knuu5er4i7n443difysspid.onion"><th>Tor (onion) #2<br><small>Hawk Host · Singapore</small></th><td class="hash"><code>xcoinidb2u22ecqthp2awr3uhabdecps2knuu5er4i7n443difysspid.onion</code><br><span class="st live">live since 2026-10-02</span></td></tr>
+<tr data-s="github pages microsoft systemthreat.github.io/survival-kit"><th>GitHub Pages<br><small>Microsoft</small></th><td class="hash"><a href="https://systemthreat.github.io/Survival-Kit/"><code>systemthreat.github.io/Survival-Kit</code></a><br><span class="st live">live since 2026-10-01</span></td></tr>
+</tbody>
 </table></div>
+<nav class="cp-pager" id="mr-pager" aria-label="Mirror pages" hidden>
+  <button type="button" id="mr-prev">← Previous</button>
+  <span id="mr-page" aria-live="polite"></span>
+  <button type="button" id="mr-next">Next →</button>
+</nav>
+<h3 id="community">Community mirrors <small>machine-checked · not signed</small></h3>
+<p>Anyone can add a mirror: serve this page unchanged on your own onion address, then submit it on any official onion
+(<a href="http://xcoinidhhqb2raevgt244ellko3s6j3r7krpblru4zvdhccolg26akqd.onion/submit">genesis /submit</a> · <a href="http://xcoinidb2u22ecqthp2awr3uhabdecps2knuu5er4i7n443difysspid.onion/submit">#2 /submit</a>). Every official onion checks
+it over Tor each hour and lists it automatically while it serves the current signed release byte for byte. A changed
+page is dropped at once. This list is not part of the signed page: check any mirror yourself with the two commands below.</p>
+<p id="cm-msg" class="cp-msg" role="status">The live list shows on the onion mirrors (<code>/community.json</code> there).</p>
+<div class="wrap"><table class="cp" id="cm" hidden>
+<thead><tr><th>Community mirror</th><th>Address</th></tr></thead>
+<tbody></tbody></table></div>
 <p><b>Check a mirror is genuine:</b> every mirror serves <code>manifest.json</code> and its signature <code>manifest.json.sig</code> next to this page. With <code>allowed_signers</code> (the public release key) and two stock commands:</p>
 <pre>ssh-keygen -Y verify -f allowed_signers -I release@xcoinproject \
   -n xcoin-survival -s manifest.json.sig &lt; manifest.json
 shasum -a 256 index.html    # must equal "index.html" in manifest.json</pre>
 <p>Run your own mirror: anyone may, on their own onion address. The mirror kit and its checker are free (MIT); this page is public domain (CC0).</p>
-<p class="note">Keep your own copy: save this page. It is one file and works offline. If you run a node, host a mirror too and tell the community.</p>
+<p class="note">Keep your own copy: save this page. It is one file and works offline. If you run a node, host a mirror too and submit it above.</p>
+
+<h2 id="sealed">7 · Sealed commitments <small>proof of what was known, and when</small></h2>
+<p>A sealed commitment proves the project knew something on a given date without saying what, until it is revealed. Its fingerprint, SHA-256 of <code>xcoin-commit/1|text|salt</code>, is put into an xCoin transaction, so the block's time is the proof. Once revealed, anyone can recompute it and find it already in that block.</p>
+<div class="wrap"><table class="cp sealed">
+<thead><tr><th>Commitment</th><th>Fingerprint · on chain</th></tr></thead>
+<tbody>
+<tr><th>#1<br>(sealed)<br><span class="st">sealed</span></th><td class="hash"><code>711aa9029f28b21509cf84401b5cf579dfd5f38288fe204238d4fa46a3bdd84c</code><br><small>tx <a href="https://superknet.com/tx/a2b79cff6310e3388ac000b5203d816e4f9e3a7c6a4c95532e4e2f7dd5c8281f">a2b79cff…c8281f</a> · block 2,428 · 2026-10-02 15:23:41 UTC</small></td></tr>
+</tbody></table></div>
 
 <footer>
-  xCoin survival sheet · one HTML file, no trackers, one optional print button script, nothing loaded from elsewhere · last updated 2026-10-01 at height 2,208
+  xCoin survival sheet · one HTML file, no trackers, one optional print button script, nothing loaded from elsewhere · last updated at height <!-- cp-tip -->2,438<!-- /cp-tip -->
 </footer>
+<script>
+// Search and pages of five, for the checkpoints and the mirrors. Optional, like the print button: with scripts off each
+// table shows its first five rows and a CSS-only "Show all" (scrolling in its own box); printed, every row is listed.
+(function(){
+  var PER=5,fmt=function(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,',')};
+  function list(id,noun,find){
+    var $=function(s){return document.getElementById(id+'-'+s)},t=document.getElementById(id),rows=[].slice.call(t.tBodies[0].rows),
+        q=$('q'),msg=$('msg'),pager=$('pager'),prev=$('prev'),next=$('next'),pg=$('page'),page=0,pages=Math.max(1,Math.ceil(rows.length/PER));
+    function only(keep){rows.forEach(function(r){r.hidden=keep.indexOf(r)<0})}
+    function paged(){
+      page=Math.min(Math.max(page,0),pages-1);only(rows.slice(page*PER,page*PER+PER));
+      pg.textContent=rows.length?noun+' '+(page*PER+1)+'–'+Math.min(rows.length,page*PER+PER)+' of '+rows.length:'no '+noun+' yet';
+      prev.disabled=page===0;next.disabled=page>=pages-1;pager.hidden=false;msg.textContent='';
+    }
+    function search(){var v=q.value.trim();if(v===''){paged();return}pager.hidden=true;var r=find(v,rows);only(r.show);msg.textContent=r.say}
+    t.classList.add('js');var all=document.getElementById(id+'-all');all.hidden=true;all.nextElementSibling.hidden=true;$('tools').hidden=false;
+    prev.onclick=function(){page--;paged();if(prev.disabled)next.focus()};next.onclick=function(){page++;paged();if(next.disabled)prev.focus()};
+    q.addEventListener('input',search);q.addEventListener('keydown',function(e){if(e.key==='Escape'){q.value='';paged()}});
+    paged();
+  }
+  // genesis message: decoded here, in the browser, from the hex on the page (skip the 9 marker bytes)
+  var gm=document.querySelector('.gm');if(gm)gm.addEventListener('toggle',function(){if(!gm.open)return;
+    var h=document.getElementById('gm-hex').textContent.trim(),out='';for(var i=18;i<h.length;i+=2)out+=String.fromCharCode(parseInt(h.substr(i,2),16));
+    document.getElementById('gm-out').textContent=out});
+  // sealed commitments: "Check it" recomputes SHA-256 of the revealed line here and compares it with the fingerprint shown
+  [].forEach.call(document.querySelectorAll('.sc'),function(d){d.addEventListener('toggle',function(){
+    if(!d.open)return;var out=d.querySelector('.sc-out'),line=d.querySelector('.sc-in').textContent.trim(),want=d.getAttribute('data-fp');
+    if(!(window.crypto&&crypto.subtle)){out.textContent='This browser cannot hash here; use the shasum line below the box on any computer.';return}
+    crypto.subtle.digest('SHA-256',new TextEncoder().encode(line)).then(function(b){
+      var h=[].map.call(new Uint8Array(b),function(x){return('0'+x.toString(16)).slice(-2)}).join('');
+      out.textContent=(h===want?'✔ MATCH: ':'✘ NO MATCH: ')+'SHA-256 = '+h;out.className='sc-out '+(h===want?'ok':'bad')})})});
+  // checkpoints: a block height; the exact checkpoint, or the nearest before and after
+  list('cp','checkpoints',function(v,rows){
+    var raw=v.replace(/[\s,]/g,''),h=function(r){return +r.getAttribute('data-h')};
+    if(!/^\d{1,9}$/.test(raw))return{show:[],say:'Type a block height: digits only.'};
+    var n=+raw,exact=null,below=null,above=null;
+    rows.forEach(function(r){var x=h(r);if(x===n)exact=r;if(x<=n&&(!below||x>h(below)))below=r;if(x>n&&(!above||x<h(above)))above=r});
+    if(exact)return{show:[exact],say:'Checkpoint at height '+fmt(n)+'.'};
+    if(!rows.length)return{show:[],say:'No checkpoints yet.'};
+    if(!above)return{show:[below],say:'Height '+fmt(n)+' is newer than the latest checkpoint ('+fmt(h(rows[0]))+'). Shown: the latest.'};
+    return{show:[above,below].filter(Boolean),say:'No checkpoint at '+fmt(n)+' (one every 1,000 blocks). Shown: the nearest before and after. Your node answers any height: nex-cli getblockhash '+n};
+  });
+  // mirrors: any part of an address or a provider's name (the genesis mirror is pinned above the table)
+  list('mr','mirrors',function(v,rows){
+    var k=v.toLowerCase(),hit=rows.filter(function(r){return r.getAttribute('data-s').indexOf(k)>=0});
+    return{show:hit,say:hit.length?hit.length+' mirror'+(hit.length>1?'s':'')+' found.':'No mirror matches "'+v+'". The genesis mirror above is always there.'};
+  });
+})();
+</script>
+<script>
+// Community mirrors: read this mirror's machine-checked list (unsigned) and show it. Optional: without scripts, or off
+// the onion mirrors, the message above stays and nothing else changes. Text only (no HTML from the list is ever used).
+(function(){
+  var t=document.getElementById('cm'),msg=document.getElementById('cm-msg');
+  if(!t||!window.fetch||!/\.onion$|^localhost$|^127\.0\.0\.1$/.test(location.hostname))return;
+  fetch('community.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){
+    if(!d||!Array.isArray(d.mirrors))return;
+    var tb=t.tBodies[0],label={current:'current',behind:'behind',unreachable:'unreachable'};
+    d.mirrors.forEach(function(m){
+      if(!/^[a-z2-7]{56}\.onion$/.test(m.onion))return;
+      var tr=document.createElement('tr'),th=document.createElement('th'),td=document.createElement('td'),
+          c=document.createElement('code'),st=document.createElement('span'),sm=document.createElement('small');
+      th.textContent='Community';sm.textContent='listed since '+String(m.listed_since).slice(0,10);th.appendChild(document.createElement('br'));th.appendChild(sm);
+      td.className='hash';c.textContent=m.onion;st.className='st'+(m.status==='current'?' live':'');
+      st.textContent=(label[m.status]||'?')+(m.status==='behind'?' · release '+Number(m.version):'');
+      td.appendChild(c);td.appendChild(document.createElement('br'));td.appendChild(st);tr.appendChild(th);tr.appendChild(td);tb.appendChild(tr);
+    });
+    var n=tb.rows.length;t.hidden=n===0;
+    msg.textContent=(n?n+' community mirror'+(n===1?'':'s'):'No community mirrors yet')+' · checked '+String(d.checked).replace('T',' ').replace('Z',' UTC')+' by this mirror.';
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html>

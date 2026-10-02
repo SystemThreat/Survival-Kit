@@ -1,5 +1,6 @@
 #!/bin/bash
 # setup-onion.sh: turn a fresh Ubuntu 24.04 or 26.04 server into an xCoin survival-sheet onion mirror. Run as root, once.
+# Keep the nginx block identical to deploy/nginx-xcoin-survival.conf (a test checks it).
 # Re-running is safe: every step checks before it changes anything.
 #
 #   The server opens NO port to the internet. Tor makes outgoing connections only; nginx answers on 127.0.0.1:8080
@@ -35,8 +36,10 @@ apt-get update -q
 apt-get install -y -q tor deb.torproject.org-keyring
 
 echo "== nginx: 127.0.0.1:8080 only, no version, no logs of visitors"
-install -d -m 755 "$WEB"
+install -d -m 755 "$WEB" /var/lib/xcoin-mirrors
 cat > /etc/nginx/sites-available/xcoin-survival <<'NGINX'
+# xCoin survival sheet onion mirror (installed by setup-onion.sh and install-mirrord.sh). Tor alone reaches it.
+limit_req_zone $server_name zone=xcoin_submit:1m rate=20r/m;   # Tor hides visitors, so the limit is for everyone together
 server {
     listen 127.0.0.1:8080 default_server;
     server_name _;
@@ -46,8 +49,22 @@ server {
     server_tokens off;
     add_header X-Content-Type-Options nosniff always;
     add_header Referrer-Policy no-referrer always;
-    add_header Content-Security-Policy "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'" always;
+    add_header Content-Security-Policy "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'" always;
     location / { try_files $uri $uri/ =404; }
+    # community mirrors: the machine-checked list (unsigned) and the submit form (mirrors/mirrord.py)
+    location = /community.json {
+        alias /var/lib/xcoin-mirrors/community.json;
+        default_type application/json;
+        add_header Cache-Control "no-cache" always;
+        add_header X-Content-Type-Options nosniff always;
+        add_header Access-Control-Allow-Origin "*" always;   # other mirrors' pages may read it
+    }
+    location = /submit {
+        limit_req zone=xcoin_submit burst=5 nodelay;
+        client_max_body_size 2k;
+        proxy_pass http://127.0.0.1:8081;
+        proxy_set_header Host $host;
+    }
 }
 NGINX
 rm -f /etc/nginx/sites-enabled/default

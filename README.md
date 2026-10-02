@@ -15,6 +15,15 @@ any copy can be checked against the release key, so mirrors keep checking each o
 | `checker/survival.py` | Builds manifests, verifies copies, checks mirrors over Tor. Python standard library + `ssh-keygen`. |
 | `tools/keygen.sh` | Makes the release-signing key (once). |
 | `tools/sign.sh` | Signs a release. |
+| `tools/checkpoints.py` | Writes the checkpoint table from two agreeing nodes (`--check` compares only). |
+| `tools/commit.py` | Sealed commitments (commit-reveal): see [COMMITMENTS.md](COMMITMENTS.md). |
+| `tools/set-release.py` | Puts the newest xCoin node release on the page (version, commit, download buttons); `--check` only asks. |
+| `tools/release-watch.sh` | Daily macOS notification when a node release is newer than the page (`--install` once). |
+| `mirrors/mirrord.py` | Community mirrors: the submit form and the hourly check that lists/drops them (runs on every official onion). |
+| `deploy/hosts` | The official onion mirrors that `publish.sh` updates (git-ignored; start from `deploy/hosts.example`). |
+| `deploy/publish.sh` | Publishes the signed release to every host in `deploy/hosts` and confirms each serves it. |
+| `deploy/install-mirrord.sh` | Installs/updates the community-mirror service on one official onion. |
+| `deploy/setup-onion.sh`, `restore-onion-key.sh` | A new official onion server; its address key from the key drive. |
 | `tests/` | `python3 -m unittest discover -s tests` |
 
 ## Verdicts
@@ -42,7 +51,25 @@ Later: add co-maintainers' public keys to `allowed_signers` so the sheet does no
     cd ~/xcoin-sites/xcoin-survival && tools/sign.sh 1
 
 Use a higher version number every time (2, 3, …). The script writes the manifest, asks for the passphrase, signs, and
-verifies the result. Publish `site/` (all three files) and `allowed_signers` to every mirror.
+verifies the result. Then `deploy/publish.sh` sends it to every official onion in `deploy/hosts` and prints OK per
+mirror. GitHub/Codeberg Pages are git pushes, done by hand (squash first: see the session notes).
+
+## A new xCoin node release
+
+    tools/set-release.py          # finds the latest tag on GitHub, checks its commit against ~/x-Coin/xCoin-xid, edits the page
+    tools/sign.sh <next> && deploy/publish.sh
+
+`tools/release-watch.sh --install` makes the Mac tell you daily when the page is behind. It never edits or signs anything.
+
+## Community mirrors (automatic listing)
+
+Anyone serves the three release files on their own onion and submits the address at `/submit` on any official onion.
+`mirrord.py check` runs hourly on every official onion: it fetches each candidate over Tor and lists it in
+`/community.json` only while it serves the current signed release byte for byte (checker verdicts). A changed page is
+dropped at once and blocked for 7 days; an older release is shown as "behind" for 7 days, then dropped; unreachable for
+48 h, dropped. Official onions read each other's lists for addresses only and always check themselves, so there is no
+primary: any one of them can die. The list is not signed; the page reads it only on an onion host, text-only.
+Install/update on a host: `deploy/install-mirrord.sh` (and `XCOIN_ONION_HOST=root@<host> …` for the others).
 
 ## Check
 
@@ -51,10 +78,7 @@ verifies the result. Publish `site/` (all three files) and `allowed_signers` to 
 
 ## Still to build
 
-3. The founder's onion mirror on its own AWS server, running the checker and the "submit a mirror" form.
-4. The mirror kit: one command for anyone to run their own onion copy.
-5. Mirror-to-mirror discovery: each mirror publishes the onions it checked; checkers learn addresses from each other
-   but always re-check themselves.
+4. The mirror kit: one command for anyone to run their own onion copy (setup-onion.sh minus the founder's key).
 
 ## Never
 
